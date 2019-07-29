@@ -70,11 +70,6 @@
             <version>1.8.0-beta4</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.9</version>
-        </dependency>
-        <dependency>
             <groupId>org.linuxprobe</groupId>
             <artifactId>luava-json</artifactId>
             <version>0.0.3.RELEASE</version>
