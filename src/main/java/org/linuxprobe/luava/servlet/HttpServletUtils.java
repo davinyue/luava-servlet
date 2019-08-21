@@ -18,18 +18,26 @@ public class HttpServletUtils {
      */
     public static boolean isAjax(HttpServletRequest request) {
         if (request.getMethod().equalsIgnoreCase("GET")) {
+            // postman
             if (request.getHeader("postman-token") != null
                     || request.getHeader("user-agent").toLowerCase().contains("postman")) {
                 return true;
             }
+            // httpclient
+            if (request.getHeader("user-agent").toLowerCase().contains("httpclient")) {
+                return true;
+            }
+            // ajax
             String XRequestedWithHeader = request.getHeader("X-Requested-With");
             if ("XMLHttpRequest".equalsIgnoreCase(XRequestedWithHeader)) {
                 return true;
             }
+            // 请求内容是json
             String contentTypeHeader = request.getHeader("Content-Type");
             if (StringUtils.isNotBlank(contentTypeHeader) && contentTypeHeader.contains("json")) {
                 return true;
             }
+            // 请求内容是json
             String acceptHeader = request.getHeader("Accept");
             if (StringUtils.isNotBlank(acceptHeader) && acceptHeader.contains("json")) {
                 return true;
