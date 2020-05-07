@@ -1,6 +1,5 @@
 package org.linuxprobe.luava.servlet;
 
-import org.apache.commons.lang3.StringUtils;
 import org.linuxprobe.luava.json.JacksonUtils;
 
 import javax.servlet.ServletOutputStream;
@@ -34,15 +33,12 @@ public class HttpServletUtils {
             }
             // 请求内容是json
             String contentTypeHeader = request.getHeader("Content-Type");
-            if (StringUtils.isNotBlank(contentTypeHeader) && contentTypeHeader.contains("json")) {
+            if (contentTypeHeader != null && contentTypeHeader.contains("json")) {
                 return true;
             }
             // 请求内容是json
             String acceptHeader = request.getHeader("Accept");
-            if (StringUtils.isNotBlank(acceptHeader) && acceptHeader.contains("json")) {
-                return true;
-            }
-            return false;
+            return acceptHeader != null && acceptHeader.contains("json");
         } else {
             return true;
         }
@@ -108,7 +104,7 @@ public class HttpServletUtils {
         if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
             if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
-                /** 根据网卡取本机配置的IP */
+                // 根据网卡取本机配置的IP
                 InetAddress inet = null;
                 try {
                     inet = InetAddress.getLocalHost();
@@ -118,8 +114,8 @@ public class HttpServletUtils {
                 ipAddress = inet.getHostAddress();
             }
         }
-        /** 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割 */
-        if (StringUtils.isNoneBlank(ipAddress)) {
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if (ipAddress != null) {
             if (ipAddress.indexOf(",") > 0) {
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }
@@ -148,10 +144,9 @@ public class HttpServletUtils {
      * @param fileName 编码前文件名
      */
     public static void setResponseFileName(HttpServletResponse response, String fileName) {
-        StringBuilder contentDispositionValue = new StringBuilder("attachment;");
-        contentDispositionValue.append(" filename=" + encodeFileName(fileName) + ";");
-        contentDispositionValue.append(" filename*=utf-8''" + encodeFileName(fileName));
-        response.setHeader("Content-Disposition", contentDispositionValue.toString());
+        String contentDispositionValue = "attachment;" + " filename=" + encodeFileName(fileName) + ";" +
+                " filename*=utf-8''" + encodeFileName(fileName);
+        response.setHeader("Content-Disposition", contentDispositionValue);
     }
 
     /**
@@ -164,7 +159,7 @@ public class HttpServletUtils {
         try {
             ServletOutputStream out = response.getOutputStream();
             FileInputStream input = new FileInputStream(file);
-            /** 设置文件ContentType类型，这样设置，会自动判断下载文件类型 */
+            // 设置文件ContentType类型，这样设置，会自动判断下载文件类型
             response.setContentType("multipart/form-data");
             String fileName = file.getName();
             setResponseFileName(response, fileName);
@@ -194,7 +189,7 @@ public class HttpServletUtils {
         ServletOutputStream out = null;
         try {
             out = response.getOutputStream();
-            /** 设置文件ContentType类型，这样设置，会自动判断下载文件类型 */
+            //设置文件ContentType类型，这样设置，会自动判断下载文件类型
             response.setContentType("multipart/form-data");
             setResponseFileName(response, fileName);
             byte[] bin = new byte[1024 * 4];
@@ -227,16 +222,12 @@ public class HttpServletUtils {
             response.setHeader("Content-type", "text/json;charset=UTF-8");
             response.setContentType("text/json");
         }
-        PrintWriter writer = null;
-        try {
-            writer = response.getWriter();
+        try (PrintWriter writer = response.getWriter()) {
             writer.write(JacksonUtils.toJsonString(data));
             writer.flush();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            writer.close();
         }
     }
 
