@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <licenses>
@@ -37,7 +37,7 @@
 
     <groupId>org.linuxprobe</groupId>
     <artifactId>luava-servlet</artifactId>
-    <version>0.0.5.RELEASE</version>
+    <version>0.0.6.RELEASE</version>
     <packaging>jar</packaging>
     <name>luava-servlet</name>
     <description>luava-servlet</description>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.linuxprobe</groupId>
             <artifactId>luava-json</artifactId>
-            <version>0.0.7.RELEASE</version>
+            <version>0.0.8.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

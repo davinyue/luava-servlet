@@ -17,13 +17,25 @@ public class HttpServletUtils {
      */
     public static boolean isAjax(HttpServletRequest request) {
         if (request.getMethod().equalsIgnoreCase("GET")) {
+            String userAgent = request.getHeader("user-agent").toLowerCase();
             // postman
-            if (request.getHeader("postman-token") != null
-                    || request.getHeader("user-agent").toLowerCase().contains("postman")) {
+            if (userAgent.contains("postman")) {
+                return true;
+            }
+            // postwoman
+            if (userAgent.contains("postwoman")) {
                 return true;
             }
             // httpclient
-            if (request.getHeader("user-agent").toLowerCase().contains("httpclient")) {
+            if (userAgent.contains("httpclient")) {
+                return true;
+            }
+            // ok http
+            if (userAgent.contains("okhttp")) {
+                return true;
+            }
+            // OSX paw
+            if (userAgent.contains("paw")) {
                 return true;
             }
             // ajax
