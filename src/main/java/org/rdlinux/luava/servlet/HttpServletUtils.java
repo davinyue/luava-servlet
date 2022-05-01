@@ -1,6 +1,6 @@
-package org.linuxprobe.luava.servlet;
+package org.rdlinux.luava.servlet;
 
-import org.linuxprobe.luava.json.JacksonUtils;
+import org.rdlinux.luava.json.JacksonUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
