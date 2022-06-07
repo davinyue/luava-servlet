@@ -121,7 +121,7 @@ public class HttpServletUtils {
                 try {
                     inet = InetAddress.getLocalHost();
                 } catch (UnknownHostException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
                 ipAddress = inet.getHostAddress();
             }
@@ -156,8 +156,9 @@ public class HttpServletUtils {
      * @param fileName 编码前文件名
      */
     public static void setResponseFileName(HttpServletResponse response, String fileName) {
-        String contentDispositionValue = "attachment;" + " filename=" + encodeFileName(fileName) + ";" +
-                " filename*=utf-8''" + encodeFileName(fileName);
+        fileName = encodeFileName(fileName);
+        String contentDispositionValue = "attachment;" + " filename=" + fileName + ";" +
+                " filename*=utf-8''" + fileName;
         response.setHeader("Content-Disposition", contentDispositionValue);
     }
 
