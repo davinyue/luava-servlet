@@ -169,9 +169,7 @@ public class HttpServletUtils {
      * @param file     返回文件
      */
     public static void responseFile(HttpServletResponse response, File file) {
-        try {
-            ServletOutputStream out = response.getOutputStream();
-            FileInputStream input = new FileInputStream(file);
+        try (ServletOutputStream out = response.getOutputStream(); FileInputStream input = new FileInputStream(file)) {
             // 设置文件ContentType类型，这样设置，会自动判断下载文件类型
             response.setContentType("multipart/form-data");
             String fileName = file.getName();
@@ -199,9 +197,7 @@ public class HttpServletUtils {
      * @param inputStream 输入流
      */
     public static void responseFile(HttpServletResponse response, String fileName, InputStream inputStream) {
-        ServletOutputStream out = null;
-        try {
-            out = response.getOutputStream();
+        try (ServletOutputStream out = response.getOutputStream()) {
             //设置文件ContentType类型，这样设置，会自动判断下载文件类型
             response.setContentType("multipart/form-data");
             setResponseFileName(response, fileName);
@@ -210,8 +206,6 @@ public class HttpServletUtils {
                 i = inputStream.read(bin);
                 if (i != -1) {
                     out.write(bin, 0, i);
-                } else {
-                    out.close();
                 }
             }
         } catch (IOException e) {
@@ -264,5 +258,52 @@ public class HttpServletUtils {
     public static void responseJson(HttpServletRequest request, HttpServletResponse response, Object data) {
         boolean isMSBrowser = HttpServletUtils.isMSBrowser(request);
         responseJson(isMSBrowser, response, data);
+    }
+
+    /**
+     * 重定向, 解决url带有hash路由时浏览器会处理错误的问题
+     */
+    public static void redirect(String redirectUrl, HttpServletRequest request, HttpServletResponse response) {
+        try (PrintWriter out = response.getWriter()) {
+            if (redirectUrl.contains("#")) {
+                String xForwardedPrefix = request.getHeader("x-forwarded-prefix");
+                if (xForwardedPrefix == null) {
+                    xForwardedPrefix = "";
+                }
+                if (!redirectUrl.toLowerCase().startsWith("http")) {
+                    redirectUrl = xForwardedPrefix + redirectUrl;
+                }
+                response.setHeader("Content-type", "text/html;charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType("text/html;charset=UTF-8");
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println(" <head><meta http-equiv=Content-Type content=\"text/html; charset=utf-8\"><title>redirect</title></head>");
+                out.println(" <body>");
+                out.println("<script>window.location.href='" + redirectUrl + "'</script>");
+                out.println(" </body>");
+                out.println("</html>");
+                out.flush();
+            } else {
+                response.sendRedirect(redirectUrl);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 返回html页面
+     *
+     * @param response response对象
+     * @param html     html页面
+     */
+    public static void responseHtml(HttpServletResponse response, String html) {
+        try (PrintWriter out = response.getWriter()) {
+            out.println(html);
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
