@@ -197,6 +197,19 @@ public class HttpServletUtils {
      * @param inputStream 输入流
      */
     public static void responseFile(HttpServletResponse response, String fileName, InputStream inputStream) {
+        responseFile(response, fileName, inputStream, true);
+    }
+
+    /**
+     * 返回文件, 会自动编码文件名, 防止乱码
+     *
+     * @param response         httpServletResponse
+     * @param fileName         文件名
+     * @param inputStream      输入流
+     * @param closeInputStream 是否关闭输入流
+     */
+    public static void responseFile(HttpServletResponse response, String fileName, InputStream inputStream,
+                                    boolean closeInputStream) {
         try (ServletOutputStream out = response.getOutputStream()) {
             //设置文件ContentType类型，这样设置，会自动判断下载文件类型
             response.setContentType("multipart/form-data");
@@ -210,6 +223,13 @@ public class HttpServletUtils {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (closeInputStream) {
+                try {
+                    inputStream.close();
+                } catch (IOException ignore) {
+                }
+            }
         }
     }
 

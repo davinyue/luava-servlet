@@ -35,7 +35,7 @@
 
     <groupId>org.rdlinux</groupId>
     <artifactId>luava-servlet</artifactId>
-    <version>0.0.9.RELEASE</version>
+    <version>0.1.0.RELEASE</version>
     <packaging>jar</packaging>
     <name>luava-servlet</name>
     <description>luava-servlet</description>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.rdlinux</groupId>
             <artifactId>luava-json</artifactId>
-            <version>0.0.9.RELEASE</version>
+            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
