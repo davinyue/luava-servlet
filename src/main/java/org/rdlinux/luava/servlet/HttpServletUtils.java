@@ -107,13 +107,13 @@ public class HttpServletUtils {
 
     public static String getRemoteAddr(HttpServletRequest request) {
         String ipAddress = request.getHeader("x-forwarded-for");
-        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
         }
-        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
             if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
                 // 根据网卡取本机配置的IP
@@ -246,8 +246,8 @@ public class HttpServletUtils {
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             response.setContentType("text/html");
         } else {
-            response.setHeader("Content-type", "text/json;charset=UTF-8");
-            response.setContentType("text/json");
+            response.setHeader("Content-type", "application/json;charset=UTF-8");
+            response.setContentType("application/json");
         }
         try (PrintWriter writer = response.getWriter()) {
             writer.write(JacksonUtils.toJsonString(data));
