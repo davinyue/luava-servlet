@@ -326,4 +326,17 @@ public class HttpServletUtils {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 获取请求源, 例如 https://www.rdlinux.org:8989
+     */
+    public static String getOrigin(HttpServletRequest request) {
+        String forwardedHost = request.getHeader("X-Forwarded-Host");
+        String originalHost = (forwardedHost != null) ? forwardedHost.split(",")[0].trim() :
+                request.getHeader("Host");
+        String forwardedProto = request.getHeader("X-Forwarded-Proto");
+        String originalProto = (forwardedProto != null) ? forwardedProto.split(",")[0].trim() :
+                request.getScheme();
+        return originalProto + "://" + originalHost;
+    }
 }

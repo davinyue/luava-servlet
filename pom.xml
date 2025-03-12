@@ -35,7 +35,7 @@
 
     <groupId>org.rdlinux</groupId>
     <artifactId>luava-servlet</artifactId>
-    <version>0.1.1.RELEASE</version>
+    <version>0.1.2.RELEASE</version>
     <packaging>jar</packaging>
     <name>luava-servlet</name>
     <description>luava-servlet</description>
